@@ -3,12 +3,12 @@ const { ethers, upgrades } = require("hardhat");
 async function main() {
   const Counter = await ethers.getContractFactory("Counter");
   console.log("Deploying Counter...");
-  const counter = await upgrades.deployProxy(Counter, [], {
+  const counter = await upgrades.deployProxy(Counter, {
     initializer: "initialize",
     kind: "uups",
   });
-  await counter.deployed();
-  console.log("Counter deployed to:", counter.address);
+  await counter.waitForDeployment(); // 使用 waitForDeployment 替代 deployed
+  console.log("Counter deployed to:", await counter.getAddress()); // 使用 getAddress 获取合约地址
 }
 
 main()
